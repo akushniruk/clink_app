@@ -1,0 +1,37 @@
+{
+    "name": "clink",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite --host",
+        "build": "tsc -b && vite build",
+        "prettier": "prettier --write .",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@erc7824/nitrolite": "^0.3.0",
+        "@heroicons/react": "2.2.0",
+        "@privy-io/react-auth": "2.17.0",
+        "@tailwindcss/vite": "4.1.10",
+        "buffer": "6.0.3",
+        "jsqr": "1.4.0",
+        "preact": "^10.26.5",
+        "react-loading-skeleton": "3.5.0",
+        "react-qrcode-logo": "3.0.0",
+        "swiper": "11.2.8",
+        "tailwindcss": "4.1.10",
+        "valtio": "2.1.5",
+        "viem": "2.31.3"
+    },
+    "devDependencies": {
+        "@preact/preset-vite": "^2.10.1",
+        "@vitejs/plugin-legacy": "6.1.1",
+        "prettier": "3.5.3",
+        "rollup-plugin-visualizer": "6.0.3",
+        "terser": "5.43.0",
+        "typescript": "~5.8.3",
+        "vite": "^6.3.5",
+        "vite-plugin-pwa": "1.0.0"
+    }
+}

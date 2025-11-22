@@ -1,0 +1,269 @@
+@import "tailwindcss";
+
+/* Custom CSS variables for Tailwind - these will be available as utilities */
+:root {
+    /* App colors */
+    --color-base-red: #ffffff;
+    --color-base-green: #b6f24e;
+    --color-base-violet: #9f54fc;
+    --color-base-yellow: #ffbb29;
+
+    --color-cta: #DF5201;
+    --color-cta-1: color-mix(in srgb, #DF5201 50%, transparent);
+    --color-cta-2: color-mix(in srgb, #DF5201 35%, transparent);
+    --color-cta-3: color-mix(in srgb, #DF5201 25%, transparent);
+    --color-cta-4: color-mix(in srgb, #DF5201 15%, transparent);
+    --color-cta-5: color-mix(in srgb, #DF5201 8%, transparent);
+
+    --color-shades-100: #ffffff;
+    --color-shades-90: #f1f1f1;
+    --color-shades-80: #e0e0e0;
+    --color-shades-70: #c8c8c8;
+    --color-shades-60: #a8a8a8;
+    --color-shades-50: #888888;
+    --color-shades-40: #666666;
+    --color-shades-30: #444444;
+    --color-shades-20: #2a2a2a;
+    --color-shades-10: #1a1a1a;
+    --color-shades-blur-10: color-mix(in srgb, #1a1a1a 80%, transparent);
+    --color-shades-5: #0d0d0d;
+    --color-shades-0: #000000;
+}
+
+/* Sora font fallback and additional weights */
+body {
+    font-family:
+        "Sora",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+}
+
+/* Font weight utilities for Sora */
+.font-light {
+    font-weight: 300;
+}
+.font-normal {
+    font-weight: 400;
+}
+.font-medium {
+    font-weight: 500;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.font-bold {
+    font-weight: 700;
+}
+
+/* Non-critical styles - loaded after critical path */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading states */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    border-top-color: #6366f1;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slide-up 0.3s ease-out forwards;
+}
+
+/* Lazy loaded images */
+img.loaded {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+img:not(.loaded) {
+    opacity: 0;
+}
+
+.text-gradient-fold {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.45) 50%, rgba(0, 0, 0, 0.1));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.text-gradient-fold::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* iOS-specific utilities */
+@supports (-webkit-touch-callout: none) {
+    .ios\:mb-14 {
+        margin-bottom: 3.5rem;
+    }
+    .ios\:mb-12 {
+        margin-bottom: 3rem;
+    }
+}
+
+/* Safe area padding for devices with notches */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Notification animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes progressBar {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0%;
+    }
+}
+
+.notification-card {
+    animation: slideInRight 0.3s ease-out;
+    position: relative;
+}
+
+.notification-card:hover {
+    animation: pulse 0.5s ease-in-out;
+}
+
+.notification-card.removing {
+    animation: slideOutRight 0.3s ease-in;
+}
+
+.notification-progress {
+    animation: progressBar 10s linear forwards;
+}
+
+/* Notification container positioning */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 0;
+    z-index: 1000;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100vw;
+}
+
+.notification-container > * {
+    pointer-events: auto;
+}
+
+/* Enhanced notification styles */
+.notification-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notification-card:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .notification-card {
+        animation: none !important;
+    }
+}
+
+.iekbcc0.ju367v4.ju367va.ju367v14.ju367v1s.ju367v7p {
+    font-family: "Sora", sans-serif;
+}
+
+.iekbcc0.ju367vj.ju367v2b.ju367v6c.ju367v8r.ju367v94 {
+    display: none;
+}
+
+.iekbcc0.iekbcc9.ju367v8a.ju367v6j.ju367v74.ju367v7p.ju367vo.ju367vt.ju367vv.ju367v13.ju367v8u.ju367v9f.ju367va3._1y2lnfi1._1y2lnfi0._12cbo8i3.ju367v8r._12cbo8i4._12cbo8i6 {
+    border-radius: 4px;
+    min-width: 100%;
+    background: var(--color-cta);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+}
+
+.iekbcc0.ju367vgu.ju367v16.ju367v1a.ju367v1h.ju367v8u.ju367va.ju367v4 {
+    font-family: "Sora", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    border-radius: 0;
+}

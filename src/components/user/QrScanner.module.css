@@ -1,0 +1,364 @@
+/* QR Scanner Styles */
+.wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 1000;
+}
+
+.feed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Close button */
+.closeButton {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.closeButton:hover {
+    background: rgba(0, 0, 0, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.closeButton:active {
+    transform: scale(0.95);
+}
+
+/* Dark backdrop with scan area cutout */
+.backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 160px);
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.scanArea {
+    width: 280px;
+    height: 280px;
+    background: transparent;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+}
+
+/* Scan frame with colored corners */
+.frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.corner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-width: 4px;
+    border-style: solid;
+}
+
+.corner.tl {
+    top: -2px;
+    left: -2px;
+    border-color: #f25e4e transparent transparent #f25e4e;
+    border-top-left-radius: 12px;
+}
+
+.corner.tr {
+    top: -2px;
+    right: -2px;
+    border-color: #ffbb29 #ffbb29 transparent transparent;
+    border-top-right-radius: 12px;
+}
+
+.corner.bl {
+    bottom: -2px;
+    left: -2px;
+    border-color: transparent transparent #b6f24e #b6f24e;
+    border-bottom-left-radius: 12px;
+}
+
+.corner.br {
+    bottom: -2px;
+    right: -2px;
+    border-color: transparent #9f54fc #9f54fc transparent;
+    border-bottom-right-radius: 12px;
+}
+
+/* Bottom banner */
+.banner {
+    position: absolute;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
+    padding: 40px 20px 30px;
+    text-align: center;
+    z-index: 11;
+}
+
+.bannerContent {
+    margin: 0 auto;
+}
+
+.banner h2 {
+    color: white;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    font-family:
+        "Sora",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.accent {
+    color: var(--color-cta, #f25e4e);
+}
+
+.banner p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+    margin: 0;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.scanInstruction {
+    font-size: 13px !important;
+    margin-top: 8px !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Error states */
+.errorContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.errorContent {
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+    padding: 20px;
+    max-width: 300px;
+}
+
+.errorIcon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.errorTitle {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    font-family:
+        "Sora",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+}
+
+.errorSubtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin: 0 0 16px 0;
+    line-height: 1.4;
+}
+
+/* Loading spinner */
+.spinner {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid var(--color-cta, #f25e4e);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* QR Validation Error Overlay */
+.validationError {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.errorCard {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 320px;
+    margin: 20px;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.3s ease-out;
+}
+
+.errorCard .errorIcon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: var(--color-cta, #f25e4e);
+    background: rgba(242, 94, 78, 0.1);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.errorCard .errorTitle {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    font-family:
+        "Sora",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+}
+
+.errorCard .errorDescription {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Scanning Indicator */
+/* .scanIndicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 30px));
+    width: 280px;
+    height: 280px;
+    pointer-events: none;
+    border-radius: 12px;
+    overflow: hidden;
+} */
+
+/* .scanLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--color-cta, #f25e4e) 20%,
+        var(--color-cta, #f25e4e) 80%,
+        transparent 100%
+    );
+    box-shadow: 0 0 8px var(--color-cta, #f25e4e);
+    animation: scanAnimation 2s linear infinite;
+}
+
+@keyframes scanAnimation {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(278px);
+        opacity: 1;
+    }
+} */
