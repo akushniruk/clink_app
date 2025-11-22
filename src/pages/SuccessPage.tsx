@@ -10,10 +10,11 @@ interface SuccessPageProps {
     recipientAddress: string;
     amount: string;
     transactionId?: string;
+    charityName?: string;
     onDone: () => void;
 }
 
-export const SuccessPage = ({ recipientAddress, amount, onDone }: SuccessPageProps) => {
+export const SuccessPage = ({ recipientAddress, amount, charityName, onDone }: SuccessPageProps) => {
     const t = useT();
 
     const userTagStoreState = useSnapshot(UserTagStore.state);
@@ -25,31 +26,13 @@ export const SuccessPage = ({ recipientAddress, amount, onDone }: SuccessPagePro
             <div className="relative z-10 h-full flex flex-col">
                 {/* Header with Icon */}
                 <div className="flex-shrink-0 flex items-center justify-center pt-8 pb-4">
-                    <svg width="228" height="228" viewBox="0 0 228 228" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g opacity="0.7" filter="url(#filter0_f_2043_5611)">
-                            <circle cx="114" cy="114" r="73.9999" fill="#B6F24E" />
-                        </g>
-                        <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M60.7539 116.495L70.6839 106.565L97.901 133.782L157.3 74.3831L167.23 84.313L97.901 153.642L60.7539 116.495Z"
-                            fill="#B6F24E"
-                        />
-                        <defs>
-                            <filter
-                                id="filter0_f_2043_5611"
-                                x="0"
-                                y="0"
-                                width="228"
-                                height="228"
-                                filterUnits="userSpaceOnUse"
-                                colorInterpolationFilters="sRGB">
-                                <feFlood floodOpacity="0" result="BackgroundImageFix" />
-                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                                <feGaussianBlur stdDeviation="20" result="effect1_foregroundBlur_2043_5611" />
-                            </filter>
-                        </defs>
-                    </svg>
+                    <img
+                        src="/app_icons/success.png"
+                        alt="Success"
+                        width="228"
+                        height="228"
+                        className="w-[228px] h-[228px] object-contain"
+                    />
                 </div>
 
                 {/* Content - centered in available space */}
@@ -65,7 +48,14 @@ export const SuccessPage = ({ recipientAddress, amount, onDone }: SuccessPagePro
                         {t('payment.success')}
                     </h1>
 
-                    <div className="flex flex-row justify-between items-center w-full py-4 mt-12 border-y border-[var(--color-cta-4)] text-sm">
+                    {charityName && (
+                        <div className="flex flex-row justify-between items-center w-full py-4 mt-12 border-y border-[var(--color-cta-4)] text-sm">
+                            <span className="font-semibold text-[var(--color-shades-50)]">Organization</span>
+                            <div className="font-semibold text-[var(--color-base-red)]">{charityName}</div>
+                        </div>
+                    )}
+
+                    <div className={`flex flex-row justify-between items-center w-full py-4 ${!charityName ? 'mt-12' : ''} border-y border-[var(--color-cta-4)] text-sm`}>
                         <span className="font-semibold text-[var(--color-shades-50)]">{t('payment.receiver')}</span>
                         <div className="font-semibold text-[var(--color-base-red)]">
                             {formatAddress(recipientAddress)}

@@ -1,17 +1,27 @@
 import { useState, useRef, useCallback, useEffect } from 'preact/hooks';
 import { formatAddress } from '../utils/addressUtils';
 import { useT } from '../i18n';
-import { config } from '../utils/env';
 import { UserIcon } from '@heroicons/react/24/solid';
+
+export type Currency = 'USDC' | 'USDT' | 'XRP' | 'WETH';
 
 interface ConfirmationPageProps {
     recipientAddress: string;
     amount: string;
+    currency?: Currency;
+    charityName?: string;
     onBack: () => void;
     onConfirm: () => void;
 }
 
-export const ConfirmationPage = ({ recipientAddress, amount, onBack, onConfirm }: ConfirmationPageProps) => {
+export const ConfirmationPage = ({
+    recipientAddress,
+    amount,
+    currency = 'USDC',
+    charityName,
+    onBack,
+    onConfirm,
+}: ConfirmationPageProps) => {
     const t = useT();
     const [slidePosition, setSlidePosition] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
@@ -126,16 +136,21 @@ export const ConfirmationPage = ({ recipientAddress, amount, onBack, onConfirm }
                 <div className="flex-1 flex flex-col justify-center items-center px-6">
                     <div className="flex flex-col justify-center gap-1 text-white items-center">
                         <span className="text-6xl font-bold">{amount}</span>
-                        <span className="text-4xl font-bold uppercase">{config.asset}</span>
+                        <span className="text-4xl font-bold uppercase">{currency}</span>
                     </div>
 
-                    {/* Recipient Address */}
-                    <div className="mt-4 flex items-center space-x-2 border border-[var(--color-shades-30)] mx-auto rounded-4xl px-4 py-1.5">
-                        <span className="text-sm text-[var(--color-shades-30)] capitalize font-semibold">
-                            {t('payment.to')}
-                        </span>
-                        <UserIcon className="w-5 h-5 text-[var(--color-shades-30)]" />
-                        <span className="text-sm text-white font-medium">{formatAddress(recipientAddress)}</span>
+                    {/* Charity Name and Recipient Address */}
+                    <div className="mt-4 flex flex-col items-center gap-2">
+                        {charityName && (
+                            <div className="text-white font-semibold text-lg">{charityName}</div>
+                        )}
+                        <div className="flex items-center space-x-2 border border-[var(--color-shades-30)] rounded-4xl px-4 py-1.5">
+                            <span className="text-sm text-[var(--color-shades-30)] capitalize font-semibold">
+                                {t('payment.to')}
+                            </span>
+                            <UserIcon className="w-5 h-5 text-[var(--color-shades-30)]" />
+                            <span className="text-sm text-white font-medium">{formatAddress(recipientAddress)}</span>
+                        </div>
                     </div>
                 </div>
 
@@ -169,7 +184,7 @@ export const ConfirmationPage = ({ recipientAddress, amount, onBack, onConfirm }
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M15 1L19 5M19 5L15 9M19 5L1 5"
-                                            stroke="#F24E4E"
+                                            stroke="#DF5201"
                                             strokeWidth="1.52"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
@@ -183,7 +198,7 @@ export const ConfirmationPage = ({ recipientAddress, amount, onBack, onConfirm }
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M15 1L19 5M19 5L15 9M19 5L1 5"
-                                            stroke="#F24E4E"
+                                            stroke="#DF5201"
                                             strokeWidth="1.52"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
@@ -197,7 +212,7 @@ export const ConfirmationPage = ({ recipientAddress, amount, onBack, onConfirm }
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
                                             d="M15 1L19 5M19 5L15 9M19 5L1 5"
-                                            stroke="#F24E4E"
+                                            stroke="#DF5201"
                                             strokeWidth="1.52"
                                             strokeLinecap="round"
                                             strokeLinejoin="round"
@@ -235,7 +250,7 @@ export const ConfirmationPage = ({ recipientAddress, amount, onBack, onConfirm }
                                         <g filter="url(#filter0_ddd_103_3546)">
                                             <path
                                                 d="M0 8C0 3.58172 3.58172 0 8 0H52C56.4183 0 60 3.58172 60 8V52C60 56.4183 56.4183 60 52 60H8C3.58172 60 0 56.4183 0 52V8Z"
-                                                fill="#A80000"
+                                                fill="#DF5201"
                                             />
                                         </g>
                                         <path

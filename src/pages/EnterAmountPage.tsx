@@ -12,11 +12,12 @@ import { trackPaymentFormViewed, trackPaymentFormSubmitted } from '../utils/anal
 
 interface EnterAmountPageProps {
     recipientAddress: string;
+    charityName?: string;
     onBack: () => void;
     onComplete: (amount: string) => void;
 }
 
-export const EnterAmountPage = ({ recipientAddress, onBack, onComplete }: EnterAmountPageProps) => {
+export const EnterAmountPage = ({ recipientAddress, charityName, onBack, onComplete }: EnterAmountPageProps) => {
     const t = useT();
     const [amount, setAmount] = useState('');
     const assetsState = useSnapshot(AssetsStore.state);
@@ -69,7 +70,7 @@ export const EnterAmountPage = ({ recipientAddress, onBack, onComplete }: EnterA
 
     // Button enabled if: amount is positive AND not exceeding balance
     const canPay = useMemo(() => {
-        return parseInt(amount || '0', 10) > 0 && !isExceedingBalance;
+        return !isExceedingBalance;
     }, [amount, isExceedingBalance]);
 
     const handlePay = useCallback(() => {
@@ -97,13 +98,18 @@ export const EnterAmountPage = ({ recipientAddress, onBack, onComplete }: EnterA
 
                 {/* Amount Display - centered in available space */}
                 <div className="flex-1 flex flex-col justify-center items-center px-6">
-                    {/* Recipient Address */}
-                    <div className="mb-14 flex items-center space-x-2 border border-[var(--color-shades-30)] mx-auto rounded-4xl px-4 py-1.5">
-                        <span className="text-sm text-[var(--color-shades-30)] capitalize font-semibold">
-                            {t('payment.to')}
-                        </span>
-                        <UserIcon className="w-5 h-5 text-[var(--color-shades-30)]" />
-                        <span className="text-sm text-white font-medium">{formatAddress(recipientAddress)}</span>
+                    {/* Charity Name and Recipient Address */}
+                    <div className="mb-14 flex flex-col items-center gap-2">
+                        {charityName && (
+                            <div className="text-white font-semibold text-lg">{charityName}</div>
+                        )}
+                        <div className="flex items-center space-x-2 border border-[var(--color-shades-30)] rounded-4xl px-4 py-1.5">
+                            <span className="text-sm text-[var(--color-shades-30)] capitalize font-semibold">
+                                {t('payment.to')}
+                            </span>
+                            <UserIcon className="w-5 h-5 text-[var(--color-shades-30)]" />
+                            <span className="text-sm text-white font-medium">{formatAddress(recipientAddress)}</span>
+                        </div>
                     </div>
                     <div className="flex gap-1 text-white items-start">
                         <span className="text-6xl font-bold">{amount || '0'}</span>
@@ -135,7 +141,7 @@ export const EnterAmountPage = ({ recipientAddress, onBack, onComplete }: EnterA
                             value={amount}
                             onChange={setAmount}
                             maxLength={8}
-                            showDecimal={false}
+                            showDecimal={true}
                             className="max-w-sm mx-auto"
                         />
                     </div>

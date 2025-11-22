@@ -241,6 +241,16 @@ img:not(.loaded) {
     }
 }
 
+/* Hide scrollbar utility */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
 .iekbcc0.ju367v4.ju367va.ju367v14.ju367v1s.ju367v7p {
     font-family: "Sora", sans-serif;
 }

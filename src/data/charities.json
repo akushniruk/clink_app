@@ -1,0 +1,202 @@
+[
+  {
+    "id": "1",
+    "name": "Red Cross",
+    "description": "International humanitarian organization providing emergency assistance",
+    "category": "humanitarian",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/red-cross.png",
+    "website": "https://www.redcross.org",
+    "verified": true
+  },
+  {
+    "id": "2",
+    "name": "UNICEF",
+    "description": "United Nations Children's Fund supporting children's rights and wellbeing",
+    "category": "children",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/unicef.png",
+    "website": "https://www.unicef.org",
+    "verified": true
+  },
+  {
+    "id": "3",
+    "name": "World Wildlife Fund",
+    "description": "Conservation organization working to protect endangered species",
+    "category": "environment",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/wwf.png",
+    "website": "https://www.worldwildlife.org",
+    "verified": true
+  },
+  {
+    "id": "4",
+    "name": "Doctors Without Borders",
+    "description": "Medical humanitarian organization providing emergency medical care",
+    "category": "healthcare",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/msf.png",
+    "website": "https://www.msf.org",
+    "verified": true
+  },
+  {
+    "id": "5",
+    "name": "Save the Children",
+    "description": "Organization helping children in need worldwide",
+    "category": "children",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/save-children.png",
+    "website": "https://www.savethechildren.org",
+    "verified": true
+  },
+  {
+    "id": "6",
+    "name": "Greenpeace",
+    "description": "Environmental activism organization protecting the planet",
+    "category": "environment",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/greenpeace.png",
+    "website": "https://www.greenpeace.org",
+    "verified": true
+  },
+  {
+    "id": "7",
+    "name": "Oxfam International",
+    "description": "Global organization working to end poverty and injustice",
+    "category": "humanitarian",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/oxfam.png",
+    "website": "https://www.oxfam.org",
+    "verified": true
+  },
+  {
+    "id": "8",
+    "name": "Khan Academy",
+    "description": "Free online education for anyone, anywhere",
+    "category": "education",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/khan-academy.png",
+    "website": "https://www.khanacademy.org",
+    "verified": true
+  },
+  {
+    "id": "9",
+    "name": "Water.org",
+    "description": "Providing access to safe water and sanitation worldwide",
+    "category": "humanitarian",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/water-org.png",
+    "website": "https://water.org",
+    "verified": true
+  },
+  {
+    "id": "10",
+    "name": "Room to Read",
+    "description": "Improving literacy and gender equality in education",
+    "category": "education",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/room-to-read.png",
+    "website": "https://www.roomtoread.org",
+    "verified": true
+  },
+  {
+    "id": "11",
+    "name": "St. Jude Children's Hospital",
+    "description": "Treating children with cancer and other life-threatening diseases",
+    "category": "healthcare",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/st-jude.png",
+    "website": "https://www.stjude.org",
+    "verified": true
+  },
+  {
+    "id": "12",
+    "name": "Ocean Conservancy",
+    "description": "Protecting ocean ecosystems and marine wildlife",
+    "category": "environment",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/ocean-conservancy.png",
+    "website": "https://oceanconservancy.org",
+    "verified": true
+  },
+  {
+    "id": "13",
+    "name": "Habitat for Humanity",
+    "description": "Building homes and communities for families in need",
+    "category": "humanitarian",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/habitat.png",
+    "website": "https://www.habitat.org",
+    "verified": true
+  },
+  {
+    "id": "14",
+    "name": "Make-A-Wish Foundation",
+    "description": "Granting wishes for children with critical illnesses",
+    "category": "children",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/make-a-wish.png",
+    "website": "https://wish.org",
+    "verified": true
+  },
+  {
+    "id": "15",
+    "name": "The Nature Conservancy",
+    "description": "Protecting lands and waters for nature and people",
+    "category": "environment",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/nature-conservancy.png",
+    "website": "https://www.nature.org",
+    "verified": true
+  },
+  {
+    "id": "16",
+    "name": "Teach For America",
+    "description": "Expanding educational opportunities for children",
+    "category": "education",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/teach-america.png",
+    "website": "https://www.teachforamerica.org",
+    "verified": true
+  },
+  {
+    "id": "17",
+    "name": "Direct Relief",
+    "description": "Medical assistance to people affected by poverty and emergencies",
+    "category": "healthcare",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/direct-relief.png",
+    "website": "https://www.directrelief.org",
+    "verified": true
+  },
+  {
+    "id": "18",
+    "name": "Feeding America",
+    "description": "Nationwide network of food banks fighting hunger",
+    "category": "humanitarian",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/feeding-america.png",
+    "website": "https://www.feedingamerica.org",
+    "verified": true
+  },
+  {
+    "id": "19",
+    "name": "charity: water",
+    "description": "Bringing clean and safe drinking water to people in developing countries",
+    "category": "humanitarian",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/charity-water.png",
+    "website": "https://www.charitywater.org",
+    "verified": true
+  },
+  {
+    "id": "20",
+    "name": "Girls Who Code",
+    "description": "Closing the gender gap in technology and engineering",
+    "category": "education",
+    "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
+    "imageUrl": "/charities/girls-who-code.png",
+    "website": "https://girlswhocode.com",
+    "verified": true
+  }
+]

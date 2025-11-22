@@ -19,6 +19,7 @@
         "buffer": "6.0.3",
         "jsqr": "1.4.0",
         "preact": "^10.26.5",
+        "preact-router": "4.1.2",
         "react-loading-skeleton": "3.5.0",
         "react-qrcode-logo": "3.0.0",
         "swiper": "11.2.8",

@@ -1,5 +1,7 @@
 import { MobileOnlyGuard } from './components/ui';
 import { HomePage } from './pages/HomePage';
+import { AccountPage } from './pages/AccountPage';
+import { CharityDetailPage } from './pages/CharityDetailPage';
 import { LoginPage } from './pages/LoginPage';
 import { OnboardingStories } from './components/onboarding';
 import { InstallBanner } from './components/pwa/InstallBanner';
@@ -15,6 +17,7 @@ import { setupPWATracking } from './utils/pwaTracking';
 import { initializeWebVitals } from './utils/webVitals';
 import { useNotifications } from './hooks/useNotifications';
 import { type RPCTransaction as Notification } from '@erc7824/nitrolite';
+import Router from 'preact-router';
 
 const AppContent = () => {
     const { isFirstTime, isLoading, markOnboardingComplete } = useFirstTimeUser();
@@ -63,7 +66,13 @@ const AppContent = () => {
             <>
                 {isFirstTime && <OnboardingStories onComplete={markOnboardingComplete} />}
                 {!isWalletReady && !isFirstTime && <LoginPage />}
-                {isWalletReady && !isFirstTime && <HomePage />}
+                {isWalletReady && !isFirstTime && (
+                    <Router>
+                        <HomePage path="/" />
+                        <CharityDetailPage path="/charity/:id" />
+                        <AccountPage path="/account" />
+                    </Router>
+                )}
                 <InstallBanner title={t('pwa.install.title')} description={t('pwa.install.description')} />
             </>
         </MobileOnlyGuard>
