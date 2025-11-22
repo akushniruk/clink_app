@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
-import { usePrivy, useWallets } from '@privy-io/react-auth';
+import { useCurrentUser, useEvmAddress, useIsInitialized, useSignEvmTypedData } from '@coinbase/cdp-hooks';
 import { createWalletClient, custom, type Address } from 'viem';
 import { mainnet } from 'viem/chains';
 import { createYellowWebSocketClient, type YellowWebSocketClient } from '../services/yellow/client';
@@ -10,23 +10,24 @@ interface UseYellowWebSocketOptions extends YellowConnectionCallbacks {
 }
 
 export const useYellowWebSocket = (options: UseYellowWebSocketOptions = {}) => {
-    const { authenticated, ready } = usePrivy();
-    const { wallets } = useWallets();
+    const { isInitialized } = useIsInitialized();
+    const { currentUser } = useCurrentUser();
+    const { evmAddress } = useEvmAddress();
+    const { signEvmTypedData } = useSignEvmTypedData();
     const [status, setStatus] = useState<WSStatus>('disconnected');
     const [error, setError] = useState<string | null>(null);
-    const [privyWalletReady, setPrivyWalletReady] = useState(false);
+    const [cdpWalletReady, setCdpWalletReady] = useState(false);
     const clientRef = useRef<YellowWebSocketClient | null>(null);
     const [isAutoApprovingChallenge, setIsAutoApprovingChallenge] = useState(false);
 
-    // Check if Privy embedded wallet is ready
+    // Check if CDP wallet is ready
     useEffect(() => {
-        const embeddedPrivyWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
-        if (ready && authenticated && embeddedPrivyWallet) {
-            setPrivyWalletReady(true);
+        if (isInitialized && currentUser && evmAddress) {
+            setCdpWalletReady(true);
         } else {
-            setPrivyWalletReady(false);
+            setCdpWalletReady(false);
         }
-    }, [ready, authenticated, wallets]);
+    }, [isInitialized, currentUser, evmAddress]);
 
     // Auto-approve challenges when they are received (but only once per challenge)
     const challengeApprovedRef = useRef<boolean>(false);
@@ -106,7 +107,7 @@ export const useYellowWebSocket = (options: UseYellowWebSocketOptions = {}) => {
 
     const connect = useCallback(
         async (walletAddress: string) => {
-            if (!authenticated || !clientRef.current) {
+            if (!currentUser || !clientRef.current) {
                 throw new Error('User not authenticated or client not available');
             }
 
@@ -114,48 +115,73 @@ export const useYellowWebSocket = (options: UseYellowWebSocketOptions = {}) => {
                 return;
             }
 
-            // Wait for Privy wallet to be ready
-            if (!privyWalletReady) {
-                throw new Error('Privy wallet not ready - please wait for wallet to initialize');
+            // Wait for CDP wallet to be ready
+            if (!cdpWalletReady) {
+                throw new Error('CDP wallet not ready - please wait for wallet to initialize');
             }
 
-            // Find the embedded Privy wallet
-            const embeddedPrivyWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
-            if (!embeddedPrivyWallet) {
-                throw new Error('Embedded Privy wallet not found');
+            if (!evmAddress) {
+                throw new Error('EVM address not found');
             }
 
-            console.log('Creating viem wallet client from embedded Privy wallet...');
+            console.log('Creating viem wallet client with CDP signing...');
 
-            // Switch to mainnet chain
-            await embeddedPrivyWallet.switchChain(mainnet.id);
-
-            // Get the EIP1193 provider from the embedded wallet
-            const eip1193provider = await embeddedPrivyWallet.getEthereumProvider();
-
-            // Create a proper viem wallet client using the embedded wallet
-            const walletClient = createWalletClient({
-                account: embeddedPrivyWallet.address as Address,
-                chain: mainnet,
-                transport: custom(eip1193provider),
-            });
-
-            console.log('Viem wallet client created successfully:', walletClient);
-
-            // Create signing function that's compatible with the client
-            const signTypedData = async (args: { domain: any; types: any; primaryType: string; message: any }) => {
-                return await walletClient.signTypedData({
-                    account: embeddedPrivyWallet.address as any,
-                    domain: args.domain,
-                    types: args.types,
-                    primaryType: args.primaryType,
-                    message: args.message,
-                });
+            // Create a custom EIP-1193 provider that uses CDP's signing functions
+            const cdpProvider = {
+                request: async ({ method, params }: { method: string; params?: any[] }) => {
+                    if (method === 'eth_accounts') {
+                        return [evmAddress];
+                    }
+                    if (method === 'eth_chainId') {
+                        return `0x${mainnet.id.toString(16)}`;
+                    }
+                    if (method === 'eth_signTypedData_v4' || method === 'eth_signTypedData') {
+                        const [_, typedDataJson] = params || [];
+                        const typedData = typeof typedDataJson === 'string' ? JSON.parse(typedDataJson) : typedDataJson;
+                        const result = await signEvmTypedData({
+                            evmAccount: evmAddress,
+                            typedData: {
+                                domain: typedData.domain,
+                                types: typedData.types,
+                                primaryType: typedData.primaryType,
+                                message: typedData.message,
+                            },
+                        });
+                        return result.signature;
+                    }
+                    throw new Error(`Unsupported method: ${method}`);
+                },
             };
 
+            // Create viem wallet client with custom CDP provider
+            const walletClient = createWalletClient({
+                account: evmAddress as Address,
+                chain: mainnet,
+                transport: custom(cdpProvider),
+            });
+
+            console.log('Viem wallet client created with CDP provider');
+
+            // Create signing function using CDP's signEvmTypedData
+            const signTypedData = async (args: { domain: any; types: any; primaryType: string; message: any }) => {
+                const result = await signEvmTypedData({
+                    evmAccount: evmAddress,
+                    typedData: {
+                        domain: args.domain,
+                        types: args.types,
+                        primaryType: args.primaryType,
+                        message: args.message,
+                    },
+                });
+                return result.signature;
+            };
+
+            console.log('Connecting to Yellow WebSocket with CDP wallet...');
+
+            // Connect with wallet client
             await clientRef.current.connect(walletAddress, signTypedData, walletClient);
         },
-        [authenticated, wallets, privyWalletReady],
+        [currentUser, evmAddress, cdpWalletReady, signEvmTypedData],
     );
 
     const disconnect = useCallback(() => {
@@ -197,6 +223,6 @@ export const useYellowWebSocket = (options: UseYellowWebSocketOptions = {}) => {
         error,
         sessionAddress: clientRef.current?.currentSessionAddress || null,
         retryCount: 0, // Could be extracted from client if needed
-        privyWalletReady,
+        privyWalletReady: cdpWalletReady, // Renamed from privyWalletReady for backwards compatibility
     };
 };

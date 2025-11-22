@@ -1,7 +1,7 @@
 import { createContext } from 'preact';
 import { useContext, useEffect, useRef } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
-import { usePrivy, useWallets } from '@privy-io/react-auth';
+import { useCurrentUser, useEvmAddress, useIsInitialized } from '@coinbase/cdp-hooks';
 import { useYellowWebSocket } from '../../hooks/useYellowWebSocket';
 import { useLoginState } from '../../hooks/useLoginState';
 import {
@@ -37,8 +37,9 @@ interface YellowWebSocketProviderProps {
 
 export const YellowWebSocketProvider = ({ children }: YellowWebSocketProviderProps) => {
     const { isLoggedIn, walletAddress } = useLoginState();
-    const { user, authenticated, ready } = usePrivy();
-    const { wallets } = useWallets();
+    const { currentUser } = useCurrentUser();
+    const { evmAddress } = useEvmAddress();
+    const { isInitialized } = useIsInitialized();
     const connectionAttempted = useRef(false);
     const lastWalletAddress = useRef<string | null>(null);
     const userRejectedSigning = useRef(false);
@@ -112,15 +113,12 @@ export const YellowWebSocketProvider = ({ children }: YellowWebSocketProviderPro
 
     // Auto-connect when user logs in and wallet is ready
     useEffect(() => {
-        const embeddedPrivyWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
-
         console.log('YellowWebSocket Auto-connect check:', {
             isLoggedIn,
             walletAddress,
-            authenticated,
-            ready,
-            userWalletAddress: user?.wallet?.address,
-            embeddedPrivyWallet: !!embeddedPrivyWallet,
+            currentUser: !!currentUser,
+            evmAddress,
+            isInitialized,
             privyWalletReady,
             isConnected,
             isConnecting,
@@ -132,10 +130,10 @@ export const YellowWebSocketProvider = ({ children }: YellowWebSocketProviderPro
         const shouldConnect =
             isLoggedIn &&
             walletAddress &&
-            authenticated &&
-            ready &&
-            user?.wallet?.address &&
-            privyWalletReady && // Use the hook's wallet ready state
+            currentUser &&
+            isInitialized &&
+            evmAddress &&
+            privyWalletReady && // Use the hook's wallet ready state (now cdpWalletReady)
             !isConnected &&
             !isConnecting &&
             !connectionAttempted.current &&
@@ -156,10 +154,9 @@ export const YellowWebSocketProvider = ({ children }: YellowWebSocketProviderPro
     }, [
         isLoggedIn,
         walletAddress,
-        authenticated,
-        ready,
-        user?.wallet?.address,
-        wallets,
+        currentUser,
+        evmAddress,
+        isInitialized,
         privyWalletReady,
         isConnected,
         isConnecting,

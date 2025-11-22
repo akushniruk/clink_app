@@ -11,7 +11,7 @@ import { Header, AccountModal, TabButton } from '../components';
 import { PayButton, PayByTagButton, QRCodeSkeleton, BalanceDisplay, TransactionHistory } from '../components/ui';
 import { config } from '../utils/env';
 import { useT } from '../i18n';
-import { usePrivy } from '@privy-io/react-auth';
+import { useSignOut } from '@coinbase/cdp-hooks';
 import {
     trackPageView,
     trackBarJourneyStep,
@@ -43,7 +43,7 @@ const MainContent = () => {
     const assetsState = useSnapshot(AssetsStore.state);
     const userTagState = useSnapshot(UserTagStore.state);
     const notificationState = useSnapshot(NotificationStore.state);
-    const { logout } = usePrivy();
+    const { signOut: logout } = useSignOut();
     const shareParams = useShareLinkParams();
 
     // Payment flow state management

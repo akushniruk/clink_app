@@ -1,5 +1,12 @@
 import { Background } from '../components/ui/Background';
-import { usePrivy, useCreateWallet, useLoginWithOAuth, useLoginWithEmail } from '@privy-io/react-auth';
+import {
+    useCurrentUser,
+    useEvmAddress,
+    useIsInitialized,
+    useSignInWithEmail,
+    useVerifyEmailOTP,
+    useSignInWithOAuth,
+} from '@coinbase/cdp-hooks';
 import { useState, useEffect } from 'preact/hooks';
 import { trackPageView, trackLoginInitiated, trackLoginSuccess, trackLoginFailed } from '../utils/analytics';
 import { EmailLoginForm } from '../components/login/EmailLoginForm';
@@ -11,13 +18,19 @@ export const LoginPage = () => {
     const [isLogging, setIsLogging] = useState(false);
     const [isCreatingWallet, setIsCreatingWallet] = useState(false);
     const [loginMethod, setLoginMethod] = useState<'email' | 'otp'>('email');
+    const [loginType, setLoginType] = useState<'email' | 'google'>('email'); // Track which login method was used
     const [email, setEmail] = useState('');
+    const [flowId, setFlowId] = useState<string>('');
     const [shouldClearOtp, setShouldClearOtp] = useState(false);
     const [lastFailedAttempt, setLastFailedAttempt] = useState<number>(0);
-    const { ready, authenticated, user } = usePrivy();
-    const { createWallet } = useCreateWallet();
-    const { initOAuth, loading: oauthLoading } = useLoginWithOAuth();
-    const { sendCode, loginWithCode, state: emailState } = useLoginWithEmail();
+    const { isInitialized } = useIsInitialized();
+    const { currentUser } = useCurrentUser();
+    const { evmAddress } = useEvmAddress();
+    const { signInWithEmail } = useSignInWithEmail();
+    const { verifyEmailOTP } = useVerifyEmailOTP();
+    const { signInWithOAuth } = useSignInWithOAuth();
+    const [oauthLoading, setOauthLoading] = useState(false);
+    const [emailState, setEmailState] = useState<{ status: string }>({ status: 'initial' });
 
     // Debug email state changes
     useEffect(() => {
@@ -29,95 +42,80 @@ export const LoginPage = () => {
         trackPageView('login_page');
     }, []);
 
-    // // Only redirect from login page if user is authenticated AND has a wallet
-    // if (authenticated && user?.wallet?.address) {
-    //     return null;
-    // }
-
-    // Handle wallet creation after Google login
+    // Track successful login when wallet is ready
     useEffect(() => {
-        const handleWalletCreation = async () => {
-            if (authenticated && user && !user.wallet && !isCreatingWallet) {
-                console.log('User authenticated, setting up account...');
-                setIsCreatingWallet(true);
-                try {
-                    await createWallet();
-                    console.log('Account setup completed successfully');
-
-                    // Track successful login completion
-                    const method = user.google?.email ? 'google' : 'email';
-                    trackLoginSuccess(method, user.id || 'unknown');
-
-                    // Wallet created successfully, user will be redirected to HomePage
-                    setIsLogging(false);
-                } catch (error) {
-                    console.error('Failed to set up account:', error);
-                    const method = user.google?.email ? 'google' : 'email';
-                    trackLoginFailed(method, 'wallet_creation_failed', user.id);
-                    setIsLogging(false);
-                } finally {
-                    setIsCreatingWallet(false);
-                }
-            }
-        };
-
-        handleWalletCreation();
-    }, [authenticated, user, createWallet, isCreatingWallet]);
+        if (currentUser && evmAddress && isLogging) {
+            console.log('Account setup completed successfully');
+            trackLoginSuccess(loginType, currentUser.userId || 'unknown');
+            setIsLogging(false);
+            setIsCreatingWallet(false);
+        }
+    }, [currentUser, evmAddress, isLogging, loginType]);
 
     useEffect(() => {
-        if (ready) {
-            console.log('Privy user object:', user);
-            if (user && user.wallet) {
-                console.log('User has wallet:', user.wallet);
-            } else if (authenticated && user && !user.wallet) {
-                console.log('User is authenticated but has no wallet yet.');
+        if (isInitialized) {
+            console.log('CDP user object:', currentUser);
+            if (currentUser && evmAddress) {
+                console.log('User has wallet:', evmAddress);
+            } else if (currentUser && !evmAddress) {
+                console.log('User is authenticated but wallet not ready yet.');
             }
         }
-    }, [ready, authenticated, user]);
+    }, [isInitialized, currentUser, evmAddress]);
 
     const handleGoogleLogin = async () => {
-        if (!ready || isLogging || oauthLoading || isCreatingWallet) return;
+        if (!isInitialized || isLogging || oauthLoading || isCreatingWallet) return;
 
         // Track login initiated
         trackLoginInitiated('google');
 
+        setLoginType('google'); // Set login type for tracking
         setIsLogging(true);
+        setIsCreatingWallet(true);
+        setOauthLoading(true);
         try {
             console.log('Logging in with Google...');
-            await initOAuth({ provider: 'google' });
-            // Wallet creation will be handled by useEffect after authentication
+            await signInWithOAuth('google');
+            // CDP automatically creates wallet on OAuth login
             console.log('Google OAuth initiated');
         } catch (error) {
             console.error('Failed to login with Google:', error);
             trackLoginFailed('google', 'oauth_failed');
             setIsLogging(false);
+            setIsCreatingWallet(false);
+        } finally {
+            setOauthLoading(false);
         }
-        // Don't set isLogging(false) here - let it stay true until wallet is created
     };
 
     const handleEmailSubmit = async (emailValue: string) => {
-        if (!ready || !emailValue || isLogging || emailState.status === 'sending-code') return;
+        if (!isInitialized || !emailValue || isLogging || emailState.status === 'sending-code') return;
 
         // Track login initiated
         trackLoginInitiated('email');
 
+        setLoginType('email'); // Set login type for tracking
         setEmail(emailValue);
         setIsLogging(true);
+        setEmailState({ status: 'sending-code' });
         try {
             console.log('Sending code to email:', emailValue);
-            await sendCode({ email: emailValue, disableSignup: false });
-            console.log('Email code sent successfully, current state:', emailState);
+            const result = await signInWithEmail({ email: emailValue });
+            setFlowId(result.flowId);
+            console.log('Email code sent successfully, flowId:', result.flowId);
             setLoginMethod('otp');
             setIsLogging(false);
+            setEmailState({ status: 'awaiting-code' });
         } catch (error) {
             console.error('Failed to send email code:', error);
             trackLoginFailed('email', 'email_code_failed');
             setIsLogging(false);
+            setEmailState({ status: 'error' });
         }
     };
 
     const handleOtpSubmit = async (code: string) => {
-        if (!ready || code.length !== 6 || isLogging || emailState.status === 'submitting-code') return;
+        if (!isInitialized || code.length !== 6 || isLogging || emailState.status === 'submitting-code') return;
 
         // Prevent spam - limit attempts to once per 2 seconds
         const now = Date.now();
@@ -128,31 +126,40 @@ export const LoginPage = () => {
 
         console.log('OTP code entered:', code);
         setIsLogging(true);
+        setIsCreatingWallet(true);
         setShouldClearOtp(false); // Reset clear flag
+        setEmailState({ status: 'submitting-code' });
 
         try {
             console.log('Verifying OTP code...');
-            await loginWithCode({ code });
-            // Wallet creation will be handled by useEffect after authentication
+            await verifyEmailOTP({ flowId, otp: code });
+            // CDP automatically creates wallet on successful email verification
             console.log('OTP verification successful');
+            setEmailState({ status: 'success' });
         } catch (error) {
             console.error('Failed to verify OTP code:', error);
             trackLoginFailed('email', 'otp_verification_failed');
             setIsLogging(false);
+            setIsCreatingWallet(false);
             setLastFailedAttempt(now);
             setShouldClearOtp(true); // Trigger OTP clearing
+            setEmailState({ status: 'error' });
         }
     };
 
     const handleResendCode = async () => {
         if (!email || emailState.status === 'sending-code') return;
 
+        setEmailState({ status: 'sending-code' });
         try {
             console.log('Resending code to email:', email);
-            await sendCode({ email, disableSignup: false });
+            const result = await signInWithEmail({ email });
+            setFlowId(result.flowId);
             console.log('Email code resent successfully');
+            setEmailState({ status: 'awaiting-code' });
         } catch (error) {
             console.error('Failed to resend email code:', error);
+            setEmailState({ status: 'error' });
         }
     };
 
@@ -177,7 +184,7 @@ export const LoginPage = () => {
                 <div className="flex-1"></div>
                 <div className="flex-shrink-0">
                     <div className="px-6 pb-6">
-                        {!ready ? (
+                        {!isInitialized ? (
                             <div className="w-full bg-cta text-white rounded-sm px-6 py-3 text-center font-semibold opacity-50">
                                 Loading...
                             </div>

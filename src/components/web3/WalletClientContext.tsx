@@ -1,12 +1,16 @@
 import { createContext } from 'preact';
-import { useContext, useEffect, useState } from 'preact/hooks';
+import { useContext } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
-import { usePrivy, useWallets } from '@privy-io/react-auth';
-import { createWalletClient, custom, type WalletClient } from 'viem';
-import { mainnet } from 'viem/chains';
+import { useEvmAddress, useSignEvmTypedData } from '@coinbase/cdp-hooks';
 
 interface WalletClientContextType {
-    walletClient: WalletClient | null;
+    signTypedData: ((args: {
+        domain: any;
+        types: any;
+        primaryType: string;
+        message: any;
+    }) => Promise<string>) | null;
+    evmAddress: string | null;
     isLoading: boolean;
     error: string | null;
 }
@@ -18,65 +22,31 @@ interface WalletClientProviderProps {
 }
 
 export const WalletClientProvider = ({ children }: WalletClientProviderProps) => {
-    const { authenticated, ready } = usePrivy();
-    const { wallets } = useWallets();
-    const [walletClient, setWalletClient] = useState<WalletClient | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { evmAddress } = useEvmAddress();
+    const { signEvmTypedData } = useSignEvmTypedData();
 
-    useEffect(() => {
-        const createClient = async () => {
-            const embeddedPrivyWallet = wallets.find((wallet) => wallet.walletClientType === 'privy');
+    const isLoading = false; // CDP handles loading internally
+    const error = null; // CDP handles errors internally
 
-            if (!authenticated || !ready || !embeddedPrivyWallet) {
-                setWalletClient(null);
-                setError(null);
-                return;
-            }
-
-            setIsLoading(true);
-            setError(null);
-
-            try {
-                // Switch to mainnet chain
-                await embeddedPrivyWallet.switchChain(mainnet.id);
-
-                // Get the EIP1193 provider from the embedded wallet
-                const eip1193provider = await embeddedPrivyWallet.getEthereumProvider();
-
-                // Create Viem WalletClient from Privy embedded wallet
-                const client = createWalletClient({
-                    account: embeddedPrivyWallet.address as any,
-                    chain: mainnet,
-                    transport: custom(eip1193provider),
-                });
-
-                setWalletClient(client);
-                // WalletClient created successfully
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : 'Failed to create wallet client';
-                setError(errorMessage);
-                setWalletClient(null);
-                // Failed to create wallet client
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        createClient();
-    }, [authenticated, ready, wallets]);
-
-    // Reset state when wallet disconnects
-    useEffect(() => {
-        if (!authenticated) {
-            setWalletClient(null);
-            setError(null);
-            setIsLoading(false);
-        }
-    }, [authenticated]);
+    // Create a signing function compatible with Yellow WebSocket client
+    const signTypedData = evmAddress
+        ? async (args: { domain: any; types: any; primaryType: string; message: any }) => {
+              const result = await signEvmTypedData({
+                  evmAccount: evmAddress,
+                  typedData: {
+                      domain: args.domain,
+                      types: args.types,
+                      primaryType: args.primaryType,
+                      message: args.message,
+                  },
+              });
+              return result.signature;
+          }
+        : null;
 
     const contextValue: WalletClientContextType = {
-        walletClient,
+        signTypedData,
+        evmAddress: evmAddress || null,
         isLoading,
         error,
     };
@@ -93,8 +63,7 @@ export const useWalletClient = (): WalletClientContextType => {
     return context;
 };
 
-// Convenience hook to get just the wallet client
-export const useViemWalletClient = (): WalletClient | null => {
-    const { walletClient } = useWalletClient();
-    return walletClient;
+// Backwards compatibility - returns the signing function
+export const useViemWalletClient = (): WalletClientContextType => {
+    return useWalletClient();
 };

@@ -1,5 +1,4 @@
-import { chains } from '../../config/chains';
-import { PrivyProvider } from '@privy-io/react-auth';
+import { CDPReactProvider } from '@coinbase/cdp-react';
 import type { ComponentChildren } from 'preact';
 
 interface ClientProvidersProps {
@@ -8,30 +7,17 @@ interface ClientProvidersProps {
 
 const ClientProviders = ({ children }: ClientProvidersProps) => {
     return (
-        <PrivyProvider
-            appId={import.meta.env.VITE_PRIVY_APP_ID ?? ''}
+        <CDPReactProvider
             config={{
-                captchaEnabled: true,
-                loginMethods: ['email', 'google'], // Standard login methods
-                appearance: {
-                    theme: 'dark',
-                    logo: '/logo.png',
-                    showWalletLoginFirst: false,
-                    walletList: [], // Hide wallet options
+                projectId: import.meta.env.VITE_COINBASE_PROJECT_ID ?? '',
+                ethereum: {
+                    createOnLogin: 'eoa', // Automatically create EOA wallet on login
                 },
-                embeddedWallets: {
-                    createOnLogin: 'users-without-wallets', // Manual wallet creation control
-                    showWalletUIs: false, // Hide wallet UI since we handle it manually
-                },
-                legal: {
-                    termsAndConditionsUrl: 'https://clink.app/terms',
-                    privacyPolicyUrl: 'https://clink.app/privacy',
-                },
-                supportedChains: chains,
+                appName: 'Clink',
             }}
         >
             {children}
-        </PrivyProvider>
+        </CDPReactProvider>
     );
 };
 

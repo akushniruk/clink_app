@@ -10,9 +10,11 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@coinbase/cdp-core": "0.0.67",
+        "@coinbase/cdp-hooks": "0.0.67",
+        "@coinbase/cdp-react": "0.0.67",
         "@erc7824/nitrolite": "^0.3.0",
         "@heroicons/react": "2.2.0",
-        "@privy-io/react-auth": "2.17.0",
         "@tailwindcss/vite": "4.1.10",
         "buffer": "6.0.3",
         "jsqr": "1.4.0",
