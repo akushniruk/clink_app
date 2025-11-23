@@ -7,7 +7,8 @@
     "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
     "imageUrl": "/charities/red-cross.png",
     "website": "https://www.redcross.org",
-    "verified": true
+    "verified": true,
+    "goalAmount": "2000000000"
   },
   {
     "id": "2",
@@ -17,7 +18,8 @@
     "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
     "imageUrl": "/charities/unicef.png",
     "website": "https://www.unicef.org",
-    "verified": true
+    "verified": true,
+    "goalAmount": "1400000000"
   },
   {
     "id": "3",
@@ -27,7 +29,8 @@
     "walletAddress": "0xc49A7cbe9C36945867e309727B68A651a1913F27",
     "imageUrl": "/charities/wwf.png",
     "website": "https://www.worldwildlife.org",
-    "verified": true
+    "verified": true,
+    "goalAmount": "5000000000"
   },
   {
     "id": "4",

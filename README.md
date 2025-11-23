@@ -47,7 +47,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/layer-3/clink.git
+git clone https://github.com/akushniruk/clink_app.git
 cd clink
 
 # Install dependencies

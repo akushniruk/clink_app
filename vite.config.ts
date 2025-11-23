@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type PluginOption } from 'vite';
 import preact from '@preact/preset-vite';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -367,7 +367,7 @@ export default defineConfig(({ command }) => {
                 open: false,
                 gzipSize: true,
                 brotliSize: true,
-            }),
+            }) as PluginOption,
         ],
     };
 });

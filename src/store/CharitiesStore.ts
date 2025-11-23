@@ -11,6 +11,7 @@ export interface Charity {
     website?: string;
     verified: boolean;
     createdAt?: string;
+    goalAmount?: string;
 }
 
 export interface ICharitiesState {

@@ -9,20 +9,20 @@ export const en: TranslationKey = {
 
     // Onboarding Stories
     onboarding: {
-        welcome: {
-            title: 'Welcome to Clink',
-            subtitle: 'Enjoy a Free Drink',
-            description: 'Join us for a complimentary drink—your first sip of the Clink experience.',
+        discover: {
+            title: 'Discover Charities',
+            subtitle: 'Find Causes You Care About',
+            description: 'Browse verified charities and find organizations making a real difference in the world.',
         },
-        topUp: {
-            title: 'Top Up in Seconds',
-            subtitle: 'At the Cashier',
-            description: 'Visit any cashier to add funds—fast, secure, and ready when you are.',
+        donate: {
+            title: 'Make an Impact',
+            subtitle: 'Donate with Ease',
+            description: 'Support your chosen charities with secure, instant donations—every contribution counts.',
         },
-        getDrink: {
-            title: 'Order & Enjoy',
-            subtitle: 'Pick Up at the Bar',
-            description: 'Order at the bar and enjoy your favorite drinks—quick service, great taste.',
+        track: {
+            title: 'Track Your Giving',
+            subtitle: 'See Your Impact',
+            description: 'Follow charity progress and watch how your donations help reach important goals.',
         },
         progress: 'Step {current} of {total}',
     },

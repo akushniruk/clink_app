@@ -1,5 +1,6 @@
 import { useSnapshot } from 'valtio';
 import { useState, useMemo, useCallback, useEffect, useRef } from 'preact/hooks';
+import { route } from 'preact-router';
 import CharitiesStore from '../store/CharitiesStore';
 import { Background } from '../components/ui/Background';
 import { Header } from '../components/layout/Header';
@@ -39,9 +40,8 @@ export const HomePage = (_props?: HomePageProps) => {
 
     // Handle new charity click
     const handleNewClick = useCallback(() => {
-        // TODO: Implement add new charity functionality
         console.log('Add new charity clicked');
-        alert('Add new charity feature coming soon!');
+        route('/charity/create');
     }, []);
 
     // Filter charities based on debounced search query

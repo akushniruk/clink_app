@@ -9,20 +9,20 @@ export const fr: TranslationKey = {
 
     // Histoires d’onboarding
     onboarding: {
-        welcome: {
-            title: 'Bienvenue sur Clink',
-            subtitle: 'Votre boisson offerte',
-            description: 'Rejoignez‑nous et savourez une boisson gratuite, un avant‑goût de l’expérience Clink.',
+        discover: {
+            title: 'Découvrez des œuvres caritatives',
+            subtitle: 'Trouvez des causes qui vous tiennent à cœur',
+            description: 'Parcourez des organisations caritatives vérifiées et trouvez celles qui font une vraie différence dans le monde.',
         },
-        topUp: {
-            title: 'Recharge express',
-            subtitle: 'À la caisse',
-            description: 'Ajoutez des fonds en caisse : rapide, sécurisé et prêt quand vous l’êtes.',
+        donate: {
+            title: 'Faites un impact',
+            subtitle: 'Donnez facilement',
+            description: 'Soutenez vos organisations caritatives préférées avec des dons sécurisés et instantanés — chaque contribution compte.',
         },
-        getDrink: {
-            title: 'Commandez & dégustez',
-            subtitle: 'Retrait au bar',
-            description: 'Commandez au bar et profitez de vos boissons préférées : service rapide, saveurs garanties.',
+        track: {
+            title: 'Suivez votre générosité',
+            subtitle: 'Voyez votre impact',
+            description: 'Suivez les progrès des œuvres caritatives et voyez comment vos dons aident à atteindre des objectifs importants.',
         },
         progress: 'Étape {current} sur {total}',
     },

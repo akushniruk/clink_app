@@ -9,22 +9,22 @@ export interface TranslationKey {
 
     // Onboarding Stories
     onboarding: {
-        welcome: {
+        discover: {
             title: string;
             subtitle: string;
             description: string;
         };
-        topUp: {
+        donate: {
             title: string;
             subtitle: string;
             description: string;
         };
-        getDrink: {
+        track: {
             title: string;
             subtitle: string;
             description: string;
         };
-        progress: string; // "{current} of {total}"
+        progress: string; // "Step {current} of {total}"
     };
 
     // Home Page

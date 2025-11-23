@@ -7,29 +7,29 @@ import { trackOnboardingStep } from '../../utils/analytics';
 
 // Pre-computed gradient styles for better performance
 const STORY_GRADIENTS = {
-    welcome: 'linear-gradient(180deg, rgba(56, 4, 4, 0.6) 0%, rgba(121, 29, 29, 0.6) 100%), #000',
-    topUp: 'linear-gradient(180deg, rgba(56, 16, 4, 0.6) 0%, rgba(87, 121, 29, 0.6) 100%), #000',
-    getDrink: 'linear-gradient(180deg, rgba(56, 16, 4, 0.6) 0%, rgba(69, 13, 117, 0.6) 100%), #000',
+    discover: 'linear-gradient(180deg, rgba(56, 4, 4, 0.6) 0%, rgba(121, 29, 29, 0.6) 100%), #000',
+    donate: 'linear-gradient(180deg, rgba(56, 16, 4, 0.6) 0%, rgba(87, 121, 29, 0.6) 100%), #000',
+    track: 'linear-gradient(180deg, rgba(56, 16, 4, 0.6) 0%, rgba(69, 13, 117, 0.6) 100%), #000',
 } as const;
 
 const STORY_COLORS = {
-    welcome: 'var(--color-cta)',
-    topUp: '#B6F24E',
-    getDrink: '#9F54FC',
+    discover: 'var(--color-cta)',
+    donate: '#B6F24E',
+    track: '#9F54FC',
 } as const;
 
 const BADGE_STYLES = {
-    welcome: {
+    discover: {
         bg: 'var(--color-cta-4)',
         border: 'var(--color-cta-2)',
         color: 'var(--color-base-red)',
     },
-    topUp: {
+    donate: {
         bg: 'rgba(182, 242, 78, 0.15)',
         border: 'rgba(182, 242, 78, 0.35)',
         color: '#B6F24E',
     },
-    getDrink: {
+    track: {
         bg: 'rgba(159, 84, 252, 0.15)',
         border: 'rgba(159, 84, 252, 0.35)',
         color: '#9F54FC',
@@ -42,17 +42,17 @@ export const Story = ({ story, isActive, onNext, currentIndex, totalStories }: S
 
     // Memoized style calculations
     const backgroundGradient = useMemo(
-        () => STORY_GRADIENTS[story.id as keyof typeof STORY_GRADIENTS] || STORY_GRADIENTS.welcome,
+        () => STORY_GRADIENTS[story.id as keyof typeof STORY_GRADIENTS] || STORY_GRADIENTS.discover,
         [story.id],
     );
 
     const centerGlowColor = useMemo(
-        () => STORY_COLORS[story.id as keyof typeof STORY_COLORS] || STORY_COLORS.welcome,
+        () => STORY_COLORS[story.id as keyof typeof STORY_COLORS] || STORY_COLORS.discover,
         [story.id],
     );
 
     const badgeStyle = useMemo(
-        () => BADGE_STYLES[story.id as keyof typeof BADGE_STYLES] || BADGE_STYLES.welcome,
+        () => BADGE_STYLES[story.id as keyof typeof BADGE_STYLES] || BADGE_STYLES.discover,
         [story.id],
     );
 

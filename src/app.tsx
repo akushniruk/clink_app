@@ -2,6 +2,7 @@ import { MobileOnlyGuard } from './components/ui';
 import { HomePage } from './pages/HomePage';
 import { AccountPage } from './pages/AccountPage';
 import { CharityDetailPage } from './pages/CharityDetailPage';
+import { CreateCharityPage } from './pages/CreateCharityPage';
 import { LoginPage } from './pages/LoginPage';
 import { OnboardingStories } from './components/onboarding';
 import { InstallBanner } from './components/pwa/InstallBanner';
@@ -69,6 +70,7 @@ const AppContent = () => {
                 {isWalletReady && !isFirstTime && (
                     <Router>
                         <HomePage path="/" />
+                        <CreateCharityPage path="/charity/create" />
                         <CharityDetailPage path="/charity/:id" />
                         <AccountPage path="/account" />
                     </Router>

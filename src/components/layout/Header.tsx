@@ -16,7 +16,7 @@ const HomeButton = () => (
 );
 
 const NewButton = () => (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1 px-3 py-2.5">
         <PlusIcon className="w-5 h-5 text-[var(--color-shades-100)]" />
         <span className="text-[var(--color-shades-100)] text-sm font-semibold">New</span>
     </div>
@@ -51,21 +51,21 @@ export const Header = ({ onAccountClick, showHomeButton = false, onNewClick }: H
             {onNewClick && (
                 <button
                     onClick={onNewClick}
-                    className="hover:opacity-90 transition-opacity">
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-[var(--color-cta-3)] rounded-md hover:bg-[var(--color-cta-4)] active:bg-[var(--color-cta-2)] transition-colors touch-manipulation">
                     <NewButton />
                 </button>
             )}
             {showHomeButton && (
                 <button
                     onClick={() => route('/')}
-                    className="hover:bg-[var(--color-cta-5)] rounded-full transition-colors">
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-[var(--color-cta-5)] active:bg-[var(--color-cta-4)] rounded-full transition-colors touch-manipulation">
                     <HomeButton />
                 </button>
             )}
             {onAccountClick && (
                 <button
                     onClick={onAccountClick}
-                    className="hover:bg-[var(--color-cta-5)] rounded-full transition-colors">
+                    className="min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-[var(--color-base-green-2)] active:bg-[var(--color-base-green-3)] rounded-full transition-colors touch-manipulation">
                     <AccountIcon />
                 </button>
             )}

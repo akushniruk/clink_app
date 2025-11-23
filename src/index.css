@@ -15,6 +15,10 @@
     --color-cta-4: color-mix(in srgb, #DF5201 15%, transparent);
     --color-cta-5: color-mix(in srgb, #DF5201 8%, transparent);
 
+    --color-base-green-1: color-mix(in srgb, #b6f24e 50%, transparent);
+    --color-base-green-2: color-mix(in srgb, #b6f24e 25%, transparent);
+    --color-base-green-3: color-mix(in srgb, #b6f24e 15%, transparent);
+
     --color-shades-100: #ffffff;
     --color-shades-90: #f1f1f1;
     --color-shades-80: #e0e0e0;

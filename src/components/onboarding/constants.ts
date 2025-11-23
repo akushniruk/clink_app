@@ -5,19 +5,19 @@ export const PROGRESS_UPDATE_INTERVAL = 16;
 
 export const STORIES: StoryData[] = [
     {
-        id: 'welcome',
+        id: 'discover',
         number: '1',
         color: 'text-base-red',
         glowColor: 'bg-base-red',
     },
     {
-        id: 'topUp',
+        id: 'donate',
         number: '2',
         color: 'text-base-green',
         glowColor: 'bg-base-green',
     },
     {
-        id: 'getDrink',
+        id: 'track',
         number: '3',
         color: 'text-base-violet',
         glowColor: 'bg-base-violet',

@@ -342,6 +342,7 @@ export const CharityDetailPage = ({ id }: CharityDetailPageProps) => {
                     <div className="mb-6">
                         <DonationSection
                             totalAmount={totalAmount}
+                            goalAmount={charity.goalAmount}
                             previousAmount={previousAmount}
                             participantsCount={participantsCount}
                             onDonate={handleDonate}
